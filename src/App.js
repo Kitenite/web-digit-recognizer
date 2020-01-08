@@ -1,24 +1,27 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import SketchPad from './components/SketchPad'
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Draw any digit from 0-9</h1>
+      <SketchPad/>
+      <div className="button-wrapper">
+        <button className="button">clear</button>
+        <button className="button">submit</button>
+      </div>
+
+      <style jsx>{`
+        .App{
+          text-align: center;
+        }
+        .button-wrapper{
+          padding-top: 5vh;
+        }
+        `}</style>
     </div>
   );
 }

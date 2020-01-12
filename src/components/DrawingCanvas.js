@@ -4,15 +4,21 @@ import ImageProcessor from './ImageProcessor'
 
 
 export default function DrawingCanvas(){
+  // useStates
   const sigCanvas = useRef({});
-  const [imageURL, setImageURL] = useState(null); // create a state that will contain our image url
+  const [imageURL, setImageURL] = useState(null);
+  const [resultArray, setResultArray] = useState(null);
 
   // Canvas Configuration
   const canvasWidth =  Math.min(window.innerHeight, window.innerWidth)/2;
   const brushSize = (canvasWidth/30).toString(10);
 
   // Functions
-  const clearPad = () => {sigCanvas.current.clear()};
+  const clearPad = () => {
+    sigCanvas.current.clear();
+    setImageURL(null);
+    setResultArray(null);
+  };
   const submitPad = () => {
     let submittedImage = sigCanvas.current.getTrimmedCanvas();
     let result = ImageProcessor(submittedImage)
@@ -20,22 +26,42 @@ export default function DrawingCanvas(){
     setImageURL(result[0].toDataURL("image/png"));
   };
 
+  // Query our AI model
   const apiCall = (image_array) => {
+    const model_url = 'http://localhost:8501/v1/models/my_model:predict';
     var xhr = new XMLHttpRequest();
     // get a callback when the server responds
     xhr.addEventListener('load', () => {
-      // update the state of the component with the result here
-      console.log(xhr.responseText)
+      // Get results and process
       let reponse = JSON.parse(xhr.responseText);
-      let result_array = reponse["predictions"][0]
-      console.log(result_array);
-      let i = result_array.indexOf(Math.max(...result_array));
-      console.log("Resulting prediction: ", i);
+      processResult(reponse)
     });
-    // open the request with the verb and the url
-    xhr.open('POST', 'http://localhost:8501/v1/models/my_model:predict');
-    // send the request
+    xhr.open('POST', model_url);
     xhr.send(JSON.stringify({ "instances": image_array }));
+  }
+
+  const processResult = (reponse) => {
+    let unsorted_array = reponse["predictions"][0];
+    let sorted_array = Array(unsorted_array.length);
+    // Get all results above 0.00%
+    for (var i = 0; i< unsorted_array.length; i++){
+      let index = unsorted_array.indexOf(Math.max(...unsorted_array));
+      let confidence = (unsorted_array[index]*100).toFixed(2)
+      if (confidence > 0){
+        sorted_array[i] = [index, confidence];
+        unsorted_array[index] = 0;
+      }
+    }
+    setResultArray(sorted_array);
+  }
+
+  const result_graph = (resultArray) => {
+    return(<div>
+      {resultArray.map((result, index) => (
+        <p key={index}>Number: {result[0]} <br/>Confidence: {result[1]}%</p>
+    ))}
+    </div>
+    )
   }
 
   return(
@@ -55,9 +81,16 @@ export default function DrawingCanvas(){
         <button className="button" onClick={clearPad}>clear</button>
         <button className="button" onClick={submitPad}>submit</button>
       </div>
+      {resultArray ? (
+        <>
+          <a>Your result: </a>
+          <a>{result_graph(resultArray)}</a>
+        </>
+      ) : null}
+
       {imageURL ? (
         <>
-          <a>Your Digit</a>
+          <a>Processed Digit</a>
           <img
             src={imageURL}
             alt="my signature"

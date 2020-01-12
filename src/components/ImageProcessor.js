@@ -64,11 +64,9 @@ const ImageProcessor = (img) => {
   // Print out array
   console.log(image_array);
 
-
   cctx.putImageData(imgData, 0, 0);
-  console.log(canvas);
   let newImage = canvas;
-  return newImage;
+  return [newImage, image_array];
 }
 
 

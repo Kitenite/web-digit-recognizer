@@ -15,22 +15,29 @@ export default function DrawingCanvas(){
   const clearPad = () => {sigCanvas.current.clear()};
   const submitPad = () => {
     let submittedImage = sigCanvas.current.getTrimmedCanvas();
-    let processedImage = ImageProcessor(submittedImage)
-    setImageURL(processedImage.toDataURL("image/png"));
+    let result = ImageProcessor(submittedImage)
+    apiCall(result[1]);
+    setImageURL(result[0].toDataURL("image/png"));
   };
 
-  const apiCall = () => {
+  const apiCall = (image_array) => {
     var xhr = new XMLHttpRequest();
     // get a callback when the server responds
     xhr.addEventListener('load', () => {
       // update the state of the component with the result here
       console.log(xhr.responseText)
+      let reponse = JSON.parse(xhr.responseText);
+      let result_array = reponse["predictions"][0]
+      console.log(result_array);
+      let i = result_array.indexOf(Math.max(...result_array));
+      console.log("Resulting prediction: ", i);
     });
     // open the request with the verb and the url
     xhr.open('POST', 'http://localhost:8501/v1/models/my_model:predict');
     // send the request
-    xhr.send(JSON.stringify({ "instances": [1.0, 2.0, 5.0] }));
+    xhr.send(JSON.stringify({ "instances": image_array }));
   }
+
   return(
     <div>
       <SignatureCanvas

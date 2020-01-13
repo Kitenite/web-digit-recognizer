@@ -28,7 +28,7 @@ export default function DrawingCanvas(){
 
   // Query our AI model
   const apiCall = (image_array) => {
-    const model_url = 'http://localhost:8501/v1/models/my_model:predict';
+    const model_url = 'http://54.197.197.40/v1/models/digit_model:predict';
     var xhr = new XMLHttpRequest();
     // get a callback when the server responds
     xhr.addEventListener('load', () => {

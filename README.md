@@ -22,7 +22,7 @@ https://www.tensorflow.org/learn
 
 Instead of having to manually build out your own model, Tensorflow allows for a level of abstraction by letting you simply input what the shape of your model is. An example model creation can be seen below with the bolded part being customizable.
 
-Tensorflow code
+> Tensorflow code
 
 In this case I am creating a model with 1 hidden layer, an input layer that takes in a matrix of 28x28 and outputs 10 different classification. We can see why in a little bit.
 So what I wanted to do is create model that takes in handwritten digit and tell me what the corresponding number is. This project is loosely based on the tensorflow clothing classfication tutorial that can be found here:
@@ -37,7 +37,7 @@ http://yann.lecun.com/exdb/mnist/
 
 We can see from the image description that the images are formatted by 28x28 matrix of pixels, which is why we’d want our input to be 28 by 28. Next, all we needed to do was load and run the model. The test output gives us an accuracy of 88%, which is good enough for the amount of data and training we had.
 
-Test accuracy
+> Test accuracy
 
 ## The client
 
@@ -61,7 +61,7 @@ Comparison of processed image and MNIST image
 
 Pretty good. Conversely, we can also train the model on a larger set of images of different ranges which makes for a much more versatile model. But that’s another project for another day. We’ll save this image and feed it to the client.
 
-Image result
+> Image result
 
 It works!
 
@@ -79,11 +79,11 @@ https://docs.docker.com/get-started/
 
 So after we’ve familiarized ourselves with Docker, we want to pull the tensorflow Docker image. Let’s try to run it in our localhost.
 
-Docker test
+> Docker test
 
 Awesome. Now we use the client REST api to talk to our container.
 
-REST API test
+> REST API test
 
 Perfect. Now that our client and server talking, we can work on deploying our server.
 

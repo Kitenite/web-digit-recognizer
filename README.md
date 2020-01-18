@@ -102,7 +102,7 @@ https://madebykiet.com/projects/digit_recognizer
 And we are finally done!
 (There was also 20+ hours spent trying to solve the CORS issue but nobody want to hear about that. It was fixed using a proxy server with Express.js)
 
-## Conculsion
+## Conclusion
 
 All in all, it the project took around 2 weeks of development time. Most of the time was spent learning how to use everything (I also was on vacation for some of it). I learned very valuable React and backend skills thanks to this project and am very excited to implement these in my next ones.
 
